@@ -46,11 +46,9 @@ export default async function ShopProductPage({params}: {params: Promise<{slug: 
     notFound();
   }
 
-  const gallery = product.gallery?.length
-    ? [product.image, ...product.gallery].filter(Boolean)
-    : product.image
-      ? [product.image]
-      : [];
+  const gallery = (
+    product.gallery?.length ? [product.image, ...product.gallery] : [product.image]
+  ).filter((image): image is NonNullable<typeof image> => Boolean(image));
 
   return (
     <div className="shop-layout">

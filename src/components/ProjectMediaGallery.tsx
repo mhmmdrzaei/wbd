@@ -12,6 +12,14 @@ type Props = {
   media: MediaItem[];
 };
 
+function isVideoEmbed(item: MediaItem): item is VideoEmbed {
+  return item._type === 'videoEmbed';
+}
+
+function isProjectImage(item: MediaItem): item is ProjectMediaImage {
+  return !isVideoEmbed(item);
+}
+
 function getEmbedUrl(url?: string) {
   if (!url) {
     return null;
@@ -38,14 +46,14 @@ function getEmbedUrl(url?: string) {
 export function ProjectMediaGallery({title, media}: Props) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const imageIndexes = media.reduce<number[]>((indexes, item, index) => {
-    if (item._type !== 'videoEmbed') {
+    if (!isVideoEmbed(item)) {
       indexes.push(index);
     }
 
     return indexes;
   }, []);
   const activeMedia = activeIndex !== null ? media[activeIndex] : null;
-  const activeImage = activeMedia && activeMedia._type !== 'videoEmbed' ? activeMedia : null;
+  const activeImage = activeMedia && isProjectImage(activeMedia) ? activeMedia : null;
   const activeImagePosition = activeIndex !== null ? imageIndexes.indexOf(activeIndex) : -1;
 
   function showPreviousImage() {
@@ -68,7 +76,7 @@ export function ProjectMediaGallery({title, media}: Props) {
     <>
       <section className="project-gallery">
         {media.map((item, index) => {
-          if (item._type === 'videoEmbed') {
+          if (isVideoEmbed(item)) {
             const embedUrl = getEmbedUrl(item.url);
 
             return (

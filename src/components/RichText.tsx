@@ -1,4 +1,5 @@
 import {PortableText} from '@portabletext/react';
+import type {PortableTextBlock} from '@portabletext/types';
 
 type Props = {
   value: unknown[] | undefined;
@@ -11,7 +12,7 @@ export function RichText({value}: Props) {
 
   return (
     <div className="rich-text">
-      <PortableText value={value} />
+      <PortableText value={value as PortableTextBlock[]} />
     </div>
   );
 }

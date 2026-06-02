@@ -94,7 +94,7 @@ export function ShopProductGallery({title, images}: Props) {
               Close
             </button>
             <div className="project-lightbox-image-wrap">
-              {lightboxIndex > 0 ? (
+              {lightboxIndex !== null && lightboxIndex > 0 ? (
                 <button
                   type="button"
                   className="project-lightbox-nav project-lightbox-nav--prev"
@@ -105,7 +105,7 @@ export function ShopProductGallery({title, images}: Props) {
                 </button>
               ) : null}
               <Image src={activeImage.asset.url} alt={title} fill sizes="90vw" className="project-lightbox-image" />
-              {lightboxIndex < cleanedImages.length - 1 ? (
+              {lightboxIndex !== null && lightboxIndex < cleanedImages.length - 1 ? (
                 <button
                   type="button"
                   className="project-lightbox-nav project-lightbox-nav--next"
