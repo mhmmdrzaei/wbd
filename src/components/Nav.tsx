@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import {NavMenu} from '@/components/NavMenu';
 import {sanityFetch} from '@/lib/sanity.client';
 import {siteSettingsQuery} from '@/lib/sanity.queries';
 import type {SiteSettings} from '@/lib/types';
@@ -33,15 +34,7 @@ export async function Nav() {
         )}
         {settings?.siteTitle || 'Clay + Motion'}
       </Link>
-      <nav>
-        <ul className="nav-list">
-          {links.map((link) => (
-            <li key={link.href}>
-              <Link href={link.href}>{link.label}</Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <NavMenu links={links} />
     </header>
   );
 }
