@@ -71,7 +71,7 @@ export default async function EventsPage() {
   return (
     <article>
       <h1 className="page-title">Events</h1>
-      <p className="page-intro">Upcoming shows, talks, and studio happenings.</p>
+      <p className="page-intro">Upcoming pop up markets, exhibitions, and other events.</p>
       {events.length === 0 ? (
         <p className="page-intro">No events scheduled right now. Check back soon.</p>
       ) : null}
