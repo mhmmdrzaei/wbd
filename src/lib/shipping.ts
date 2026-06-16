@@ -153,7 +153,7 @@ export function buildShippingProfile(
     label: `${sizeLabels[shippingSize]} / ${weightLabels[shippingWeight]}`,
     note:
       productKind === 'object'
-        ? 'Mixed carts resolve to the largest parcel and heaviest combined load, with object handling applied.'
-        : 'Mixed print carts resolve to the largest parcel and heaviest combined load.'
+        ? 'Pardon the shipping costs -- it is expensive to ship objects here!'
+        : 'Shipping costs are based on the size and weight of your prints.'
   };
 }
