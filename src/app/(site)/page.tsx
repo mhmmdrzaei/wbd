@@ -35,7 +35,7 @@ export default async function Home() {
 
   return (
     <>
-      <section className="hero">
+      {/* <section className="hero">
         <div className="hero-text">
           <h1>{home?.headline}</h1>
           {home?.intro && <p>{home?.intro}</p>}
@@ -43,7 +43,7 @@ export default async function Home() {
         {toysPage ? (
           <ToysShortcut title={toysPage.title || 'TOYS!'} href="/pages/toys" image={toysImage} />
         ) : null}
-      </section>
+      </section> */}
       <Suspense fallback={<ProjectGrid projects={allProjects} />}>
         <ProjectExplorer projects={allProjects} categories={allCategories} />
       </Suspense>

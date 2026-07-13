@@ -20,6 +20,12 @@ export const aboutPageType = defineType({
       type: 'url',
       validation: (rule) => rule.uri({scheme: ['http', 'https']})
     }),
+    defineField({
+      name: 'patreonUrl',
+      title: 'Patreon URL',
+      type: 'url',
+      validation: (rule) => rule.uri({scheme: ['http', 'https']})
+    }),
     defineField({name: 'cvPdf', title: 'CV PDF', type: 'file', options: {accept: '.pdf'}}),
     defineField({name: 'seo', title: 'SEO', type: 'seo'})
   ]

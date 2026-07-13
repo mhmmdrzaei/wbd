@@ -40,7 +40,7 @@ export default async function AboutPage() {
 
         <div>
           <RichText value={about?.body} />
-          {about?.email || about?.instagramUrl || about?.cvUrl ? (
+          {about?.email || about?.instagramUrl || about?.patreonUrl || about?.cvUrl ? (
             <div className="about-links">
               {about.email ? (
                 <a className="cv-link" href={`mailto:${about.email}`}>
@@ -50,6 +50,11 @@ export default async function AboutPage() {
               {about.instagramUrl ? (
                 <a className="cv-link" href={about.instagramUrl} target="_blank" rel="noreferrer">
                   Instagram
+                </a>
+              ) : null}
+              {about.patreonUrl ? (
+                <a className="cv-link" href={about.patreonUrl} target="_blank" rel="noreferrer">
+                  Patreon
                 </a>
               ) : null}
               {about?.cvUrl ? (

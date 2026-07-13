@@ -1,5 +1,6 @@
 import type {Metadata} from 'next';
-import {Figtree, Syne} from 'next/font/google';
+import {Figtree} from 'next/font/google';
+import localFont from 'next/font/local';
 import type {ReactNode} from 'react';
 
 import {sanityFetch} from '@/lib/sanity.client';
@@ -8,10 +9,10 @@ import type {SiteSettings} from '@/lib/types';
 
 import './globals.css';
 
-const syne = Syne({
-  subsets: ['latin'],
+const plasticine = localFont({
+  src: './fonts/Plasticine.woff',
   variable: '--font-display',
-  weight: ['500', '700', '800']
+  display: 'swap'
 });
 
 const figtree = Figtree({
@@ -36,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({children}: Readonly<{children: ReactNode}>) {
   return (
-    <html lang="en" className={`${syne.variable} ${figtree.variable}`}>
+    <html lang="en" className={`${plasticine.variable} ${figtree.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -113,6 +113,7 @@ export const aboutPageQuery = groq`*[_type == "aboutPage"][0]{
   body,
   email,
   instagramUrl,
+  patreonUrl,
   "cvUrl": cvPdf.asset->url,
   seo{metaTitle, metaDescription, noIndex, "ogImage": ogImage{asset->{url}}}
 }`;

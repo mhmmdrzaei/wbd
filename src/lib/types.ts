@@ -86,6 +86,7 @@ export type AboutPage = {
   body?: unknown[];
   email?: string;
   instagramUrl?: string;
+  patreonUrl?: string;
   cvUrl?: string;
   seo?: Seo;
 };
