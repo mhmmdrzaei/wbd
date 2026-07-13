@@ -6,9 +6,14 @@ import {ProjectMediaGallery} from '@/components/ProjectMediaGallery';
 import {RichText} from '@/components/RichText';
 import {dedupeCategories, formatCategoryLabel} from '@/lib/categories';
 import {sanityFetch} from '@/lib/sanity.client';
-import {projectBySlugQuery} from '@/lib/sanity.queries';
+import {projectBySlugQuery, projectSlugsQuery} from '@/lib/sanity.queries';
 import {buildMetadata} from '@/lib/seo';
 import type {Project} from '@/lib/types';
+
+export async function generateStaticParams() {
+  const projects = (await sanityFetch<Array<{slug: string}>>(projectSlugsQuery)) || [];
+  return projects.filter((project) => project.slug).map((project) => ({slug: project.slug}));
+}
 
 export async function generateMetadata({params}: {params: Promise<{slug: string}>}): Promise<Metadata> {
   const {slug} = await params;

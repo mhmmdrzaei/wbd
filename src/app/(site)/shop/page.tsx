@@ -1,8 +1,7 @@
 import type {Metadata} from 'next';
+import {Suspense} from 'react';
 
-import {ShopClient} from '@/components/ShopClient';
-import {ShopTagFilters} from '@/components/ShopTagFilters';
-import {dedupeCategories, normalizeCategoryValue} from '@/lib/categories';
+import {ShopExplorer} from '@/components/ShopExplorer';
 import {sanityFetch} from '@/lib/sanity.client';
 import {shippingSettingsQuery, shopPageQuery, shopProductsQuery} from '@/lib/sanity.queries';
 import {buildMetadata} from '@/lib/seo';
@@ -19,28 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function ShopPage({
-  searchParams
-}: {
-  searchParams?: Promise<{tag?: string}>;
-}) {
+export default async function ShopPage() {
   const [shop, products, shippingSettings] = await Promise.all([
     sanityFetch<ShopPage>(shopPageQuery),
     sanityFetch<ShopProduct[]>(shopProductsQuery),
     sanityFetch<ShippingSettings>(shippingSettingsQuery)
   ]);
-  const resolvedSearchParams = searchParams ? await searchParams : undefined;
-  const activeTag = resolvedSearchParams?.tag;
-  const normalizedActiveTag = activeTag ? normalizeCategoryValue(activeTag) : undefined;
   const allProducts = products || [];
-  const allTags = dedupeCategories(allProducts.flatMap((product) => product.tags || [])).sort((a, b) =>
-    a.localeCompare(b)
-  );
-  const displayProducts = normalizedActiveTag
-    ? allProducts.filter((product) =>
-        (product.tags || []).some((tag) => normalizeCategoryValue(tag) === normalizedActiveTag)
-      )
-    : allProducts;
 
   return (
     <article>
@@ -48,8 +32,9 @@ export default async function ShopPage({
       <p className="page-intro">
         {shop?.intro || 'Products live in Sanity. Shipping is estimated from item type, parcel size, and combined cart weight before Stripe checkout.'}
       </p>
-      <ShopTagFilters tags={allTags} activeTag={activeTag} />
-      <ShopClient products={displayProducts} shippingSettings={shippingSettings} />
+      <Suspense fallback={null}>
+        <ShopExplorer products={allProducts} shippingSettings={shippingSettings} />
+      </Suspense>
     </article>
   );
 }

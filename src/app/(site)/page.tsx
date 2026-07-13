@@ -1,9 +1,10 @@
 import type {Metadata} from 'next';
+import {Suspense} from 'react';
 
-import {CategoryFilters} from '@/components/CategoryFilters';
+import {ProjectExplorer} from '@/components/ProjectExplorer';
 import {ProjectGrid} from '@/components/ProjectGrid';
 import {ToysShortcut} from '@/components/ToysShortcut';
-import {dedupeCategories, normalizeCategoryValue} from '@/lib/categories';
+import {dedupeCategories} from '@/lib/categories';
 import {sanityFetch} from '@/lib/sanity.client';
 import {homePageQuery, pageBySlugQuery, projectsQuery} from '@/lib/sanity.queries';
 import {buildMetadata} from '@/lib/seo';
@@ -20,31 +21,17 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function Home({
-  searchParams
-}: {
-  searchParams?: Promise<{category?: string}>;
-}) {
+export default async function Home() {
   const [home, projects, toysPage] = await Promise.all([
     sanityFetch<HomePage>(homePageQuery),
     sanityFetch<ProjectCard[]>(projectsQuery),
     sanityFetch<Page>(pageBySlugQuery, {slug: 'toys'})
   ]);
   const toysImage = toysPage?.images?.find((image) => image?.asset?.url);
-  const resolvedSearchParams = searchParams ? await searchParams : undefined;
-  const activeCategory = resolvedSearchParams?.category;
-  const normalizedActiveCategory = activeCategory ? normalizeCategoryValue(activeCategory) : undefined;
   const allProjects = projects || [];
   const allCategories = dedupeCategories(allProjects.flatMap((project) => project.categories || [])).sort(
     (a, b) => a.localeCompare(b)
   );
-  const filteredProjects = normalizedActiveCategory
-    ? allProjects.filter((project) =>
-        (project.categories || []).some(
-          (category) => normalizeCategoryValue(category) === normalizedActiveCategory
-        )
-      )
-    : allProjects;
 
   return (
     <>
@@ -57,8 +44,9 @@ export default async function Home({
           <ToysShortcut title={toysPage.title || 'TOYS!'} href="/pages/toys" image={toysImage} />
         ) : null}
       </section>
-      <CategoryFilters categories={allCategories} activeCategory={activeCategory} />
-      <ProjectGrid projects={filteredProjects} />
+      <Suspense fallback={<ProjectGrid projects={allProjects} />}>
+        <ProjectExplorer projects={allProjects} categories={allCategories} />
+      </Suspense>
     </>
   );
 }

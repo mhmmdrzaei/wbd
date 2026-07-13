@@ -55,6 +55,8 @@ export const projectsQuery = groq`*[_type == "project"] | order(year desc){
   categories
 }`;
 
+export const projectSlugsQuery = groq`*[_type == "project" && defined(slug.current)]{"slug": slug.current}`;
+
 export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
   _id,
   title,
@@ -138,6 +140,8 @@ export const shopProductsQuery = groq`*[_type == "shopProduct" && active == true
   shippingWeight,
   active
 }`;
+
+export const shopProductSlugsQuery = groq`*[_type == "shopProduct" && active == true && defined(slug.current)]{"slug": slug.current}`;
 
 export const shopProductBySlugQuery = groq`*[_type == "shopProduct" && slug.current == $slug && active == true][0]{
   _id,

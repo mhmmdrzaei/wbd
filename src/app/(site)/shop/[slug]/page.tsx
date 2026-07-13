@@ -8,9 +8,14 @@ import {ShopAddToCartButton} from '@/components/ShopAddToCartButton';
 import {ShopProductGallery} from '@/components/ShopProductGallery';
 import {dedupeCategories} from '@/lib/categories';
 import {sanityFetch} from '@/lib/sanity.client';
-import {shippingSettingsQuery, shopProductBySlugQuery} from '@/lib/sanity.queries';
+import {shippingSettingsQuery, shopProductBySlugQuery, shopProductSlugsQuery} from '@/lib/sanity.queries';
 import {buildMetadata} from '@/lib/seo';
 import type {ShippingSettings, ShopProduct} from '@/lib/types';
+
+export async function generateStaticParams() {
+  const products = (await sanityFetch<Array<{slug: string}>>(shopProductSlugsQuery)) || [];
+  return products.filter((product) => product.slug).map((product) => ({slug: product.slug}));
+}
 
 function formatMoney(amount: number, currency: string) {
   return new Intl.NumberFormat('en-US', {style: 'currency', currency}).format(amount);
